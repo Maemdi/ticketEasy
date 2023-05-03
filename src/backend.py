@@ -61,6 +61,18 @@ def produce_report(ticket_data: dict):
     return rapport
 
 
+def save_data(filename: str, data: dict):
+    """This function saves the datastructure into a json file.
+
+    Args:
+        filename: The name of the file that will contain the backup.
+        data: The datastructure used to store companies, denominations,
+            and the number of each ticket.
+    """
+    with open(filename, "w+") as f:
+        json.dump(data, f)
+
+
 if __name__ == "__main__":
     # Init
     my_ticket_data = {}
@@ -85,3 +97,7 @@ if __name__ == "__main__":
     # Report
     report = produce_report(my_ticket_data)
     print(report)
+
+    # Save data
+    my_filename = datetime.now().strftime("%Y_%m_%d-%H_%M_%S") + ".json"
+    save_data(my_filename, my_ticket_data)
