@@ -73,31 +73,59 @@ def save_data(filename: str, data: dict):
         json.dump(data, f)
 
 
+def restore_data(filename: str, reset_counts: bool = False):
+    """This function restores the datastructure from a json file.
+        As the denomination were previously converted from float
+        to string (to fit the JSON RFC - https://stackoverflow.com/a/5527017),
+        we convert those denominations back from string to float.
+
+    Args:
+        filename:
+        reset_counts:
+    """
+
+    with open(filename, "r") as f:
+        ticket_data = json.load(f)
+    if reset_counts:
+        for key in list(ticket_data.keys()):
+            for k in list(ticket_data[key].keys()):
+                ticket_data[key][float(k)] = ticket_data[key].pop(k)
+                ticket_data[key][float(k)] = 0
+    else:
+        for key, value in ticket_data.items():
+            ticket_data[key] = {float(k): v for k, v in value.items()}
+    return ticket_data
+
+
 if __name__ == "__main__":
     # Init
     my_ticket_data = {}
 
-    # Counting tickets
-    count_tickets("sodexo", 1.43, 102, my_ticket_data)
-    count_tickets("sodexo", 3.25, 45, my_ticket_data)
-    count_tickets("sodexo", 5.6, 88, my_ticket_data)
-    count_tickets("sodexo", 9.48, 34, my_ticket_data)
-    count_tickets("Groupe Up", 2.28, 1, my_ticket_data)
-    count_tickets("Groupe Up", 2.28, 101, my_ticket_data)
-    count_tickets("Groupe Up", 3.37, 2, my_ticket_data)
-    count_tickets("Groupe Up", 3.37, 43, my_ticket_data)
-    count_tickets("Groupe Up", 10.02, 34, my_ticket_data)
-    count_tickets("Edenred", 2.00, 5, my_ticket_data)
-    count_tickets("Edenred", 3.87, 80, my_ticket_data)
-    count_tickets("Edenred", 3.87, 1, my_ticket_data)
-    count_tickets("Edenred", 6.2, 88, my_ticket_data)
-    count_tickets("Natixis Intertitres", 5.00, 121, my_ticket_data)
-    count_tickets("Natixis Intertitres", 7.75, 47, my_ticket_data)
+    # Load backup
+    my_ticket_data = restore_data("2023_05_03-21_40_56.json", reset_counts=True)
+    # my_ticket_data = restore_data("2023_05_03-21_40_56.json")
+
+    # # Counting tickets
+    # count_tickets("sodexo", 1.43, 102, my_ticket_data)
+    # count_tickets("sodexo", 3.25, 45, my_ticket_data)
+    # count_tickets("sodexo", 5.6, 88, my_ticket_data)
+    # count_tickets("sodexo", 9.48, 34, my_ticket_data)
+    # count_tickets("Groupe Up", 2.28, 1, my_ticket_data)
+    # count_tickets("Groupe Up", 2.28, 101, my_ticket_data)
+    # count_tickets("Groupe Up", 3.37, 2, my_ticket_data)
+    # count_tickets("Groupe Up", 3.37, 43, my_ticket_data)
+    # count_tickets("Groupe Up", 10.02, 34, my_ticket_data)
+    # count_tickets("Edenred", 2.00, 5, my_ticket_data)
+    # count_tickets("Edenred", 3.87, 80, my_ticket_data)
+    # count_tickets("Edenred", 3.87, 1, my_ticket_data)
+    # count_tickets("Edenred", 6.2, 88, my_ticket_data)
+    # count_tickets("Natixis Intertitres", 5.00, 121, my_ticket_data)
+    # count_tickets("Natixis Intertitres", 7.75, 47, my_ticket_data)
 
     # Report
     report = produce_report(my_ticket_data)
     print(report)
 
-    # Save data
-    my_filename = datetime.now().strftime("%Y_%m_%d-%H_%M_%S") + ".json"
-    save_data(my_filename, my_ticket_data)
+    # # Save data
+    # my_filename = datetime.now().strftime("%Y_%m_%d-%H_%M_%S") + ".json"
+    # save_data(my_filename, my_ticket_data)
