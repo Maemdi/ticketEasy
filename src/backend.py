@@ -1,5 +1,6 @@
 import json
 from datetime import datetime
+from typing import Union
 
 
 def count_tickets(
@@ -61,16 +62,22 @@ def produce_report(ticket_data: dict):
     return rapport
 
 
-def save_data(filename: str, data: dict):
-    """This function saves the datastructure into a json file.
+def save_data(filename: str, data: Union[str, dict]):
+    """This function saves either:
+        - the datastructure into a json file.
+        - a text report into a text file.
 
     Args:
-        filename: The name of the file that will contain the backup.
-        data: The datastructure used to store companies, denominations,
-            and the number of each ticket.
+        filename (str): The name of the file that will contain the backup.
+        data (str/dict): Either the datastructure used to store companies,
+            denominations, and the number of each ticket OR a string containing
+            the report.
     """
     with open(filename, "w+") as f:
-        json.dump(data, f)
+        if isinstance(data, dict):
+            json.dump(data, f)
+        else:
+            f.write(data)
 
 
 def restore_data(filename: str, reset_counts: bool = False):
