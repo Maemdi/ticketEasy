@@ -2,7 +2,8 @@ import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
 from functools import partial
 from datetime import datetime
-import json
+import tkinter.scrolledtext as scrolledtext
+import pyperclip
 
 from src.backend import count_tickets, produce_report, save_data, restore_data
 
@@ -42,7 +43,8 @@ class TicketCounterApp:
 
         self.print_report_button = tk.Button(self.header_frame,
                                              text="Print Report",
-                                             command=self.print_report)
+                                             command=self.create_report_window)
+
         self.print_report_button.pack(side="left", padx=5)
 
         # Create the company frames
@@ -59,8 +61,9 @@ class TicketCounterApp:
         self.groupe_up_frame.pack(side="left", expand=True, fill="both")
 
         self.natixis_intertitres_frame = tk.LabelFrame(self.main_frame,
-                                                   text="Natixis Intertitres",
-                                                   padx=10, pady=10)
+                                                       text="Natixis "
+                                                            "Intertitres",
+                                                       padx=10, pady=10)
         self.natixis_intertitres_frame.pack(side="left", expand=True,
                                             fill="both")
 
@@ -86,6 +89,35 @@ class TicketCounterApp:
         )
         # self.load_data = restore_data
 
+    def create_report_window(self):
+        # Create report string
+        report_string = produce_report(self.ticket_data)
+
+        # Create the report window
+        new_window = tk.Toplevel()
+        new_window.title("Report")
+
+        # Create the text area
+        text_area = scrolledtext.ScrolledText(new_window, height=20,
+                                              wrap=tk.WORD)
+        text_area.insert(tk.END, report_string)
+        text_area.config(state=tk.DISABLED)
+        text_area.pack()
+
+        # Create the copy button.
+        copy_button = tk.Button(
+            new_window,
+            text="Copy",
+            command=partial(
+                pyperclip.copy,
+                text_area.get("1.0", "end-1c")
+            )
+        )
+        copy_button.pack()
+
+        # Launch this window's main event loop.
+        new_window.mainloop()
+
     def run(self):
         self.master.mainloop()
 
@@ -104,9 +136,6 @@ class TicketCounterApp:
             "2023_05_03-21_40_56.json",
             reset_counts=True
         )
-
-    def print_report(self):
-        produce_report(self.ticket_data)
 
     def create_ticket_buttons(self, frame, denominations):
         buttons = {}
