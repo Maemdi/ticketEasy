@@ -104,16 +104,31 @@ class TicketCounterApp:
         text_area.config(state=tk.DISABLED)
         text_area.pack()
 
+        # Create the footer frame
+        footer_frame = tk.Frame(new_window)
+        footer_frame.pack(side="bottom", fill="x")
+
         # Create the copy button.
         copy_button = tk.Button(
-            new_window,
+            footer_frame,
             text="Copy",
             command=partial(
                 pyperclip.copy,
                 text_area.get("1.0", "end-1c")
             )
         )
-        copy_button.pack()
+        copy_button.pack(side="left")
+
+        # Create the save button.
+        save_button = tk.Button(
+            footer_frame,
+            text="Save",
+            command=partial(
+                self.save_data,
+                text_area.get("1.0", "end-1c")
+            )
+        )
+        save_button.pack(side="left")
 
         # Launch this window's main event loop.
         new_window.mainloop()
@@ -121,9 +136,13 @@ class TicketCounterApp:
     def run(self):
         self.master.mainloop()
 
-    def save_data(self):
-        my_filename = datetime.now().strftime("%Y_%m_%d-%H_%M_%S") + ".json"
-        save_data(my_filename, self.ticket_data)
+    def save_data(self, input_data=None):
+        file_ext = ".txt"
+        if not input_data:
+            input_data = self.ticket_data
+            file_ext = ".json"
+        my_filename = datetime.now().strftime("%Y_%m_%d-%H_%M_%S") + file_ext
+        save_data(my_filename, input_data)
 
     def load_data(self):
         self.ticket_data = restore_data(
