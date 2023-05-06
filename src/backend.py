@@ -106,10 +106,10 @@ if __name__ == "__main__":
     # my_ticket_data = restore_data("2023_05_03-21_40_56.json")
 
     # # Counting tickets
-    # count_tickets("sodexo", 1.43, 102, my_ticket_data)
-    # count_tickets("sodexo", 3.25, 45, my_ticket_data)
-    # count_tickets("sodexo", 5.6, 88, my_ticket_data)
-    # count_tickets("sodexo", 9.48, 34, my_ticket_data)
+    # count_tickets("Sodexo", 1.43, 102, my_ticket_data)
+    # count_tickets("Sodexo", 3.25, 45, my_ticket_data)
+    # count_tickets("Sodexo", 5.6, 88, my_ticket_data)
+    # count_tickets("Sodexo", 9.48, 34, my_ticket_data)
     # count_tickets("Groupe Up", 2.28, 1, my_ticket_data)
     # count_tickets("Groupe Up", 2.28, 101, my_ticket_data)
     # count_tickets("Groupe Up", 3.37, 2, my_ticket_data)
