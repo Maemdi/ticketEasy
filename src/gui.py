@@ -48,46 +48,20 @@ class TicketCounterApp:
         self.print_report_button.pack(side="left", padx=5)
 
         # Create the company frames
-        self.sodexo_frame = tk.LabelFrame(self.main_frame, text="Sodexo",
-                                          padx=10, pady=10)
-        self.sodexo_frame.pack(side="left", expand=True, fill="both")
+        self.company_frames = {}
+        self.company_buttons = {}
+        for company in self.ticket_data.keys():
+            # Create frame corresponding to the company
+            self.company_frames[company] = tk.LabelFrame(
+                self.main_frame, text=company, padx=10, pady=10)
+            self.company_frames[company].pack(side="left", expand=True,
+                                              fill="both")
 
-        self.edenred_frame = tk.LabelFrame(self.main_frame, text="Edenred",
-                                           padx=10, pady=10)
-        self.edenred_frame.pack(side="left", expand=True, fill="both")
-
-        self.groupe_up_frame = tk.LabelFrame(self.main_frame, text="Groupe Up",
-                                             padx=10, pady=10)
-        self.groupe_up_frame.pack(side="left", expand=True, fill="both")
-
-        self.natixis_intertitres_frame = tk.LabelFrame(self.main_frame,
-                                                       text="Natixis "
-                                                            "Intertitres",
-                                                       padx=10, pady=10)
-        self.natixis_intertitres_frame.pack(side="left", expand=True,
-                                            fill="both")
-
-        # Create the ticket buttons
-        self.sodexo_buttons = self.create_ticket_buttons(
-            self.sodexo_frame,
-            list(self.ticket_data["Sodexo"].keys())
-        )
-
-        self.edenred_buttons = self.create_ticket_buttons(
-            self.edenred_frame,
-            list(self.ticket_data["Edenred"].keys())
-        )
-
-        self.up_buttons = self.create_ticket_buttons(
-            self.groupe_up_frame,
-            list(self.ticket_data["Groupe Up"].keys())
-        )
-
-        self.cheque_dejeuner_buttons = self.create_ticket_buttons(
-            self.natixis_intertitres_frame,
-            list(self.ticket_data["Natixis Intertitres"].keys())
-        )
-        # self.load_data = restore_data
+            # Create the ticket buttons corresponding to the company
+            self.company_buttons[company] = self.create_ticket_buttons(
+                self.company_frames[company],
+                list(self.ticket_data[company].keys())
+            )
 
     def create_report_window(self):
         # Create report string
