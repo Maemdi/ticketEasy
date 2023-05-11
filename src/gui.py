@@ -47,9 +47,23 @@ class TicketCounterApp:
 
         self.print_report_button.pack(side="left", padx=5)
 
-        # Create the company frames
+        self.remove_button = tk.Button(
+            self.header_frame,
+            text="Remove",
+            command=self.remove_company_frames_and_buttons
+        )
+
+        self.remove_button.pack(side="left", padx=5)
+
         self.company_frames = {}
         self.company_buttons = {}
+
+        # Create the company frames
+        self.load_company_frames_and_buttons()
+
+    def load_company_frames_and_buttons(self):
+
+        # Create the company frames
         for company in self.ticket_data.keys():
             # Create frame corresponding to the company
             self.company_frames[company] = tk.LabelFrame(
@@ -62,6 +76,15 @@ class TicketCounterApp:
                 self.company_frames[company],
                 list(self.ticket_data[company].keys())
             )
+
+    def remove_company_frames_and_buttons(self):
+        # Remove buttons
+        for one_company_buttons in self.company_buttons.values():
+            for button in one_company_buttons.values():
+                button.destroy()
+        # Remove frames
+        for frame in self.company_frames.values():
+            frame.destroy()
 
     def create_report_window(self):
         # Create report string
@@ -123,12 +146,18 @@ class TicketCounterApp:
             "2023_05_03-21_40_56.json",
             reset_counts=False
         )
+        self.remove_company_frames_and_buttons()
+        # Re-create the company frames
+        self.load_company_frames_and_buttons()
 
     def load_reset_data(self):
         self.ticket_data = restore_data(
             "2023_05_03-21_40_56.json",
             reset_counts=True
         )
+        self.remove_company_frames_and_buttons()
+        # Re-create the company frames
+        self.load_company_frames_and_buttons()
 
     def create_ticket_buttons(self, frame, denominations):
         buttons = {}
