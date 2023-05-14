@@ -80,8 +80,9 @@ class TicketCounterApp:
     def remove_company_frames_and_buttons(self):
         # Remove buttons
         for one_company_buttons in self.company_buttons.values():
-            for button in one_company_buttons.values():
-                button.destroy()
+            for button_list in one_company_buttons.values():
+                for button in button_list:
+                    button.destroy()
         # Remove frames
         for frame in self.company_frames.values():
             frame.destroy()
@@ -162,11 +163,24 @@ class TicketCounterApp:
     def create_ticket_buttons(self, frame, denominations):
         buttons = {}
         for denomination in denominations:
-            button = tk.Button(frame, text=f"{denomination} €",
+            # We build a subframe to own the minus button and the
+            # denomination button
+            buttons_subframe = tk.Frame(frame)
+            buttons_subframe.pack(side="top", pady=5)
+
+            button_minus = tk.Button(buttons_subframe, text=f" - ",
+                               command=partial(self.count_ticket, frame['text'],
+                                               -denomination))
+            button_minus.pack(side="left", padx=5, pady=5)
+            button = tk.Button(buttons_subframe, text=f"{denomination} €",
                                command=partial(self.count_ticket, frame['text'],
                                                denomination))
-            button.pack(side="top", pady=5)
-            buttons[denomination] = button
+            button.pack(side="left", padx=5, pady=5)
+
+            # We just add the buttons and not the subframes as even if we
+            # need to remove the elements, it seems there is no need to
+            # remove the subframes
+            buttons[denomination] = [button, button_minus]
         return buttons
 
     def count_ticket(self, company, denomination):
@@ -178,7 +192,10 @@ class TicketCounterApp:
             company: The name of the company issuing the ticket.
             denomination: The value (money) of the ticket.
         """
-        count_tickets(company, denomination, 1, self.ticket_data)
+        if denomination > 0:
+            count_tickets(company, denomination, 1, self.ticket_data)
+        else:
+            count_tickets(company, abs(denomination), -1, self.ticket_data)
 
 
 app = TicketCounterApp()
