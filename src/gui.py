@@ -5,6 +5,7 @@ from datetime import datetime
 import tkinter.scrolledtext as scrolledtext
 import pyperclip
 
+from src.add_denomination_window import AddDenominationWindow
 from src.backend import count_tickets, produce_report, save_data, restore_data
 
 
@@ -77,6 +78,14 @@ class TicketCounterApp:
                 list(self.ticket_data[company].keys())
             )
 
+            # Create the button to add a denomination to the company
+            button = tk.Button(
+                self.company_frames[company],
+                text=f"Add a denomination",
+                command=partial(self.add_denomination, company),
+                fg="Black", bg="GreenYellow")
+            button.pack(side="top", padx=5, pady=5)
+
     def remove_company_frames_and_buttons(self):
         # Remove buttons
         for one_company_buttons in self.company_buttons.values():
@@ -86,6 +95,24 @@ class TicketCounterApp:
         # Remove frames
         for frame in self.company_frames.values():
             frame.destroy()
+
+    def add_denomination(self, company_name: str):
+        denomination_window = AddDenominationWindow(company_name)
+        denomination_window.wait_window()
+        denomination = denomination_window.result
+        if denomination is not None:
+            print("Value entered:", denomination_window.result)
+        else:
+            print("Window closed or Cancel button pressed")
+            return
+
+        # Add denomination in the data structure
+        if denomination not in self.ticket_data[company_name]:
+            self.ticket_data[company_name][denomination] = 0
+
+        # Refresh gui (frames and buttons)
+        self.remove_company_frames_and_buttons()
+        self.load_company_frames_and_buttons()
 
     def create_report_window(self):
         # Create report string
@@ -162,15 +189,17 @@ class TicketCounterApp:
 
     def create_ticket_buttons(self, frame, denominations):
         buttons = {}
-        for denomination in denominations:
+        for denomination in sorted(denominations):
             # We build a subframe to own the minus button and the
             # denomination button
             buttons_subframe = tk.Frame(frame)
             buttons_subframe.pack(side="top", pady=5)
 
             button_minus = tk.Button(buttons_subframe, text=f" - ",
-                               command=partial(self.count_ticket, frame['text'],
-                                               -denomination))
+                                     command=partial(self.count_ticket,
+                                                     frame['text'],
+                                                     -denomination),
+                                     fg="Black", bg="DarkOrange")
             button_minus.pack(side="left", padx=5, pady=5)
             button = tk.Button(buttons_subframe, text=f"{denomination} €",
                                command=partial(self.count_ticket, frame['text'],
