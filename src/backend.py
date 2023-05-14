@@ -25,7 +25,8 @@ def count_tickets(
         ticket_data[company_name] = {}
     if denomination not in ticket_data[company_name]:
         ticket_data[company_name][denomination] = 0
-    ticket_data[company_name][denomination] += increment
+    if ticket_data[company_name][denomination] + increment >= 0:
+        ticket_data[company_name][denomination] += increment
 
 
 def produce_report(ticket_data: dict):
