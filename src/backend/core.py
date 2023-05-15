@@ -1,5 +1,4 @@
 import json
-from datetime import datetime
 from typing import Union
 
 
@@ -110,7 +109,7 @@ if __name__ == "__main__":
     my_ticket_data = {}
 
     # Load backup
-    my_ticket_data = restore_data("2023_05_03-21_40_56.json", reset_counts=True)
+    my_ticket_data = restore_data("../2023_05_03-21_40_56.json", reset_counts=True)
     # my_ticket_data = restore_data("2023_05_03-21_40_56.json")
 
     # # Counting tickets
