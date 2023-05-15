@@ -5,7 +5,12 @@ import tkinter.scrolledtext as scrolledtext
 import pyperclip
 
 from src.frontend.add_denomination_window import AddDenominationWindow
-from src.backend.core import count_tickets, produce_report, save_data, restore_data
+from src.backend.core import (
+    count_tickets,
+    produce_report,
+    save_data,
+    restore_data
+)
 
 
 class TicketCounterApp:
