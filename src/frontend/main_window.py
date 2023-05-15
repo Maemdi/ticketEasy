@@ -1,12 +1,16 @@
 import tkinter as tk
-from tkinter import filedialog, messagebox, ttk
 from functools import partial
 from datetime import datetime
 import tkinter.scrolledtext as scrolledtext
 import pyperclip
 
-from src.add_denomination_window import AddDenominationWindow
-from src.backend import count_tickets, produce_report, save_data, restore_data
+from src.frontend.add_denomination_window import AddDenominationWindow
+from src.backend.core import (
+    count_tickets,
+    produce_report,
+    save_data,
+    restore_data
+)
 
 
 class TicketCounterApp:
@@ -225,7 +229,3 @@ class TicketCounterApp:
             count_tickets(company, denomination, 1, self.ticket_data)
         else:
             count_tickets(company, abs(denomination), -1, self.ticket_data)
-
-
-app = TicketCounterApp()
-app.run()
