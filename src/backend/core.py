@@ -47,7 +47,7 @@ def produce_report(ticket_data: dict):
         total_tickets_societe = 0
         total_montant_societe = 0
         rapport_par_societe += f"{nom_societe}:\n"
-        for coupure, compteur in coupures.items():
+        for coupure, compteur in sorted(coupures.items()):
             total_tickets += compteur
             total_tickets_societe += compteur
             total_montant_societe += coupure * compteur
