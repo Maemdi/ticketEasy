@@ -4,6 +4,7 @@ from datetime import datetime
 import tkinter.scrolledtext as scrolledtext
 import pyperclip
 
+from src.frontend.add_company_window import AddCompanyWindow
 from src.frontend.add_denomination_window import AddDenominationWindow
 from src.backend.core import (
     count_tickets,
@@ -60,6 +61,12 @@ class TicketCounterApp:
 
         self.remove_button.pack(side="left", padx=5)
 
+        self.add_company_button = tk.Button(self.header_frame,
+                                            text="Add Company",
+                                            command=self.add_company)
+
+        self.add_company_button.pack(side="left", padx=5)
+
         self.company_frames = {}
         self.company_buttons = {}
 
@@ -105,7 +112,7 @@ class TicketCounterApp:
         denomination_window.wait_window()
         denomination = denomination_window.result
         if denomination is not None:
-            print("Value entered:", denomination_window.result)
+            print("Value entered:", denomination)
         else:
             print("Window closed or Cancel button pressed")
             return
@@ -113,6 +120,24 @@ class TicketCounterApp:
         # Add denomination in the data structure
         if denomination not in self.ticket_data[company_name]:
             self.ticket_data[company_name][denomination] = 0
+
+        # Refresh gui (frames and buttons)
+        self.remove_company_frames_and_buttons()
+        self.load_company_frames_and_buttons()
+
+    def add_company(self):
+        add_company_window = AddCompanyWindow()
+        add_company_window.wait_window()
+        company_name = add_company_window.result
+        if company_name is not None:
+            print("Value entered:", company_name)
+        else:
+            print("Window closed or Cancel button pressed")
+            return
+
+        # Add company in the data structure
+        if company_name not in self.ticket_data:
+            self.ticket_data[company_name] = {}
 
         # Refresh gui (frames and buttons)
         self.remove_company_frames_and_buttons()
