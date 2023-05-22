@@ -23,7 +23,7 @@ class TicketCounterApp:
         master.geometry("800x600")
 
         # Initialize the ticket data
-        self.ticket_data = restore_data("2023_05_03-21_40_56.json", True)
+        self.ticket_data = restore_data("real_data.json", True)
 
         # Create the main frame
         self.main_frame = tk.Frame(master)
@@ -200,7 +200,7 @@ class TicketCounterApp:
 
     def load_data(self):
         self.ticket_data = restore_data(
-            "2023_05_03-21_40_56.json",
+            "real_data.json",
             reset_counts=False
         )
         self.remove_company_frames_and_buttons()
@@ -209,7 +209,7 @@ class TicketCounterApp:
 
     def load_reset_data(self):
         self.ticket_data = restore_data(
-            "2023_05_03-21_40_56.json",
+            "real_data.json",
             reset_counts=True
         )
         self.remove_company_frames_and_buttons()
